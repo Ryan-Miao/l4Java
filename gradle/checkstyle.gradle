@@ -27,7 +27,7 @@ checkstyle {
 
     // The source sets to be analyzed as part of the check and build tasks.
     // Use 'sourceSets = []' to remove Checkstyle from the check and build tasks.
-    sourceSets = [project.sourceSets.main, project.sourceSets.test]
+//    sourceSets = [project.sourceSets.main, project.sourceSets.test]
 
     // Whether or not to allow the build to continue if there are warnings.
     ignoreFailures = false
