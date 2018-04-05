@@ -1,0 +1,43 @@
+apply plugin: 'jacoco'
+
+test {
+    jacoco {
+        dumpOnExit = true
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = true
+            element = 'CLASS'
+            includes = ['com.test.*']
+            excludes = []
+
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.8
+            }
+
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.8
+            }
+
+        }
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+    }
+}
+jacocoTestReport.group = 'Code Coverage'
+jacocoTestReport.description = 'Run code coverage for all modules and all custom tasks'
+
+check.dependsOn jacocoTestReport, jacocoTestCoverageVerification
+
