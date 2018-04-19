@@ -1,23 +1,21 @@
 package com.test.java.stream;
 
-import static java.util.stream.Collectors.maxBy;
+import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.reducing;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
 import com.google.common.collect.Lists;
+import com.test.java.stream.entity.CaloricLevel;
 import com.test.java.stream.entity.Dish;
 import com.test.java.stream.entity.Dish.Type;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import org.junit.Test;
 
@@ -113,5 +111,37 @@ public class CollectTest {
 
         System.out.println(calories);
 
+
+    }
+
+    @Test
+    public void testGroupBy() {
+        Map<Type, List<Dish>> dishesByType = dishes.stream().collect(groupingBy(Dish::getType));
+
+        Map<CaloricLevel, List<Dish>> dishesByLevel = dishes.stream().collect(groupingBy(this::getCaloricLevel));
+        System.out.println(dishesByType);
+        System.out.println(dishesByLevel);
+
+        //多级分组
+        Map<Type, Map<CaloricLevel, List<Dish>>> byTypeAndCalory = dishes.stream().collect(
+                groupingBy(Dish::getType, groupingBy(this::getCaloricLevel)));
+        byTypeAndCalory.forEach((type, byCalory) -> {
+            System.out.println("----------------------------------");
+            System.out.println(type);
+            byCalory.forEach((level, dishList) -> {
+                System.out.println("\t" + level);
+                System.out.println("\t\t" + dishList);
+            });
+        });
+    }
+
+    private CaloricLevel getCaloricLevel(Dish d) {
+        if (d.getCalories() <= 400) {
+            return CaloricLevel.DIET;
+        } else if (d.getCalories() <= 700) {
+            return CaloricLevel.NORMAL;
+        } else {
+            return CaloricLevel.FAT;
+        }
     }
 }
