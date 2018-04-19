@@ -2,32 +2,22 @@ package com.test.java.stream;
 
 import com.google.common.collect.Lists;
 import com.test.java.entity.User;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import org.junit.Before;
 import org.junit.Test;
 
 public class DistinctTest {
 
-  private List<User> users;
-
-  @Before
-  public void setUp() {
-    users = Lists.newArrayList(
-        new User(1, "a"),
-        new User(1, "b"),
-        new User(2, "b"),
-        new User(1, "a"));
-  }
+  private List<User> users = Lists.newArrayList(
+      new User(1, "a"),
+      new User(1, "b"),
+      new User(2, "b"),
+      new User(1, "a"));
 
   @Test
   public void demo() {
