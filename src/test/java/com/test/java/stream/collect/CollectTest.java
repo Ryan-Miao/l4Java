@@ -38,15 +38,15 @@ import org.junit.Test;
 public class CollectTest {
 
     final ArrayList<Dish> dishes = Lists.newArrayList(
-            new Dish("pork", false, 800, Type.MEAT),
-            new Dish("beef", false, 700, Type.MEAT),
-            new Dish("chicken", false, 400, Type.MEAT),
-            new Dish("french fries", true, 530, Type.OTHER),
-            new Dish("rice", true, 350, Type.OTHER),
-            new Dish("season fruit", true, 120, Type.OTHER),
-            new Dish("pizza", true, 550, Type.OTHER),
-            new Dish("prawns", false, 300, Type.FISH),
-            new Dish("salmon", false, 450, Type.FISH)
+        new Dish("pork", false, 800, Type.MEAT),
+        new Dish("beef", false, 700, Type.MEAT),
+        new Dish("chicken", false, 400, Type.MEAT),
+        new Dish("french fries", true, 530, Type.OTHER),
+        new Dish("rice", true, 350, Type.OTHER),
+        new Dish("season fruit", true, 120, Type.OTHER),
+        new Dish("pizza", true, 550, Type.OTHER),
+        new Dish("prawns", false, 300, Type.FISH),
+        new Dish("salmon", false, 450, Type.FISH)
     );
 
     @Test
@@ -58,12 +58,12 @@ public class CollectTest {
     public void tetMaxMin() {
         // 为啥返回Optional？ 如果stream为null怎么办
         Optional<Dish> mostCalorieDish = dishes.stream()
-                .max(comparingInt(Dish::getCalories));
+            .max(comparingInt(Dish::getCalories));
         Optional<Dish> minCalorieDish = dishes.stream().min(comparingInt(Dish::getCalories));
         Double avgCalories = dishes.stream().collect(Collectors.averagingInt(Dish::getCalories));
 
         IntSummaryStatistics summaryStatistics = dishes.stream()
-                .collect(Collectors.summarizingInt(Dish::getCalories));
+            .collect(Collectors.summarizingInt(Dish::getCalories));
         double average = summaryStatistics.getAverage();
         long count = summaryStatistics.getCount();
         int max = summaryStatistics.getMax();
@@ -103,27 +103,29 @@ public class CollectTest {
         //之前内置的几个api都是reducing的特殊情况，都可以直接用reduce实现
         //0作为起点
         Integer totalCalories = dishes.stream()
-                .collect(reducing(0, Dish::getCalories, (i, j) -> i + j));
-        Integer totalCalories2 = dishes.stream().collect(reducing(0, Dish::getCalories, Integer::sum));
-        Optional<Integer> totalCalories3 = dishes.stream().map(Dish::getCalories).reduce(Integer::sum);
+            .collect(reducing(0, Dish::getCalories, (i, j) -> i + j));
+        Integer totalCalories2 = dishes.stream()
+            .collect(reducing(0, Dish::getCalories, Integer::sum));
+        Optional<Integer> totalCalories3 = dishes.stream().map(Dish::getCalories)
+            .reduce(Integer::sum);
         int sum = dishes.stream().mapToInt(Dish::getCalories).sum();
 
         //第一个项目作为起点
         Optional<Dish> mostCalorieDish = dishes.stream()
-                .collect(reducing((d1, d2) -> d1.getCalories() > d2.getCalories() ? d1 : d2));
+            .collect(reducing((d1, d2) -> d1.getCalories() > d2.getCalories() ? d1 : d2));
 
         //手动实现toListCollector  --- 滥用reduce， 不可变的规约---不可以并行
         List<Integer> calories = dishes.stream().map(Dish::getCalories)
-                .reduce(new ArrayList<Integer>(),
-                        (List<Integer> l, Integer e) -> {
-                            l.add(e);
-                            return l;
-                        },
-                        (List<Integer> l1, List<Integer> l2) -> {
-                            l1.addAll(l2);
-                            return l1;
-                        }
-                );
+            .reduce(new ArrayList<Integer>(),
+                (List<Integer> l, Integer e) -> {
+                    l.add(e);
+                    return l;
+                },
+                (List<Integer> l1, List<Integer> l2) -> {
+                    l1.addAll(l2);
+                    return l1;
+                }
+            );
 
         System.out.println(calories);
 
@@ -135,13 +137,13 @@ public class CollectTest {
         Map<Type, List<Dish>> dishesByType = dishes.stream().collect(groupingBy(Dish::getType));
 
         Map<CaloricLevel, List<Dish>> dishesByLevel = dishes.stream()
-                .collect(groupingBy(this::getCaloricLevel));
+            .collect(groupingBy(this::getCaloricLevel));
         System.out.println(dishesByType);
         System.out.println(dishesByLevel);
 
         //多级分组
         Map<Type, Map<CaloricLevel, List<Dish>>> byTypeAndCalory = dishes.stream().collect(
-                groupingBy(Dish::getType, groupingBy(this::getCaloricLevel)));
+            groupingBy(Dish::getType, groupingBy(this::getCaloricLevel)));
         byTypeAndCalory.forEach((type, byCalory) -> {
             System.out.println("----------------------------------");
             System.out.println(type);
@@ -155,41 +157,42 @@ public class CollectTest {
         System.out.println(typesCount);
 
         Map<Type, Dish> mostCaloricByType = dishes.stream()
-                .collect(toMap(Dish::getType, Function.identity(),
-                        BinaryOperator.maxBy(comparingInt(Dish::getCalories))));
+            .collect(toMap(Dish::getType, Function.identity(),
+                BinaryOperator.maxBy(comparingInt(Dish::getCalories))));
         System.out.println(mostCaloricByType);
 
         Map<Type, Integer> totalCaloriesByType = dishes.stream()
-                .collect(groupingBy(Dish::getType, summingInt(Dish::getCalories)));
+            .collect(groupingBy(Dish::getType, summingInt(Dish::getCalories)));
 
         Map<Type, Set<CaloricLevel>> caloricLevelsByType = dishes.stream()
-                .collect(groupingBy(Dish::getType, mapping(this::getCaloricLevel, toSet())));
+            .collect(groupingBy(Dish::getType, mapping(this::getCaloricLevel, toSet())));
 
         Map<Type, Set<CaloricLevel>> caloricLevelsByType2 = dishes.stream()
-                .collect(
-                        groupingBy(Dish::getType, mapping(this::getCaloricLevel, toCollection(HashSet::new))));
+            .collect(
+                groupingBy(Dish::getType,
+                    mapping(this::getCaloricLevel, toCollection(HashSet::new))));
     }
 
     @Test
     public void testPartition() {
         Map<Boolean, List<Dish>> partitionedMenu = dishes.stream()
-                .collect(partitioningBy(Dish::isVegetarian));
+            .collect(partitioningBy(Dish::isVegetarian));
         System.out.println(partitionedMenu.get(true));
 
         List<Dish> vegetarianDishes = dishes.stream().filter(Dish::isVegetarian)
-                .collect(Collectors.toList());
+            .collect(Collectors.toList());
         System.out.println(vegetarianDishes);
 
         Map<Boolean, Map<Type, List<Dish>>> vegetarianDishesByType = dishes.stream()
-                .collect(partitioningBy(Dish::isVegetarian, groupingBy(Dish::getType)));
+            .collect(partitioningBy(Dish::isVegetarian, groupingBy(Dish::getType)));
         Map<Boolean, Integer> vegetarianDishesTotalCalories = dishes.stream()
-                .collect(partitioningBy(Dish::isVegetarian, summingInt(Dish::getCalories)));
+            .collect(partitioningBy(Dish::isVegetarian, summingInt(Dish::getCalories)));
         Map<Boolean, Dish> mostCaloricPartitionedByVegetarian = dishes.stream()
-                .collect(partitioningBy(Dish::isVegetarian,
-                        collectingAndThen(maxBy(comparingInt(Dish::getCalories)), Optional::get)));
+            .collect(partitioningBy(Dish::isVegetarian,
+                collectingAndThen(maxBy(comparingInt(Dish::getCalories)), Optional::get)));
 
         Map<Boolean, List<Integer>> partitionPrimes = IntStream.rangeClosed(2, 100).boxed()
-                .collect(partitioningBy(this::isPrime));
+            .collect(partitioningBy(this::isPrime));
         System.out.println(partitionPrimes.get(true));
 
     }
@@ -203,7 +206,7 @@ public class CollectTest {
     @Test
     public void testCustomizedCollectorForPrime() {
         Map<Boolean, List<Integer>> rs = IntStream.rangeClosed(2, 100).boxed()
-                .collect(new PrimeNumbersCollector());
+            .collect(new PrimeNumbersCollector());
         System.out.println(rs.get(true));
     }
 
@@ -213,7 +216,7 @@ public class CollectTest {
         for (int i = 0; i < 10; i++) {
             long start = System.nanoTime();
             Map<Boolean, List<Integer>> rs = IntStream.rangeClosed(2, 100).boxed()
-                    .collect(new PrimeNumbersCollector());
+                .collect(new PrimeNumbersCollector());
 
         }
     }

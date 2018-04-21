@@ -17,19 +17,18 @@ import java.util.stream.Collector;
  * Created by Ryan Miao on 4/20/18.
  */
 public class PrimeNumbersCollector implements
-        Collector<Integer, Map<Boolean, List<Integer>>, Map<Boolean, List<Integer>>> {
+    Collector<Integer, Map<Boolean, List<Integer>>, Map<Boolean, List<Integer>>> {
 
     @Override
     public Supplier<Map<Boolean, List<Integer>>> supplier() {
-        Map<String, Integer> map = new HashMap<String, Integer>() {
-            {
-                //实例化代码块
-            }
+
+        return () -> {
+            Map<Boolean, List<Integer>> map = new HashMap<>();
+            map.put(true, new ArrayList<>());
+            map.put(false, new ArrayList<>());
+            return map;
         };
-        return () -> new HashMap<Boolean, List<Integer>>() {{
-            put(true, new ArrayList<Integer>());
-            put(false, new ArrayList<Integer>());
-        }};
+
     }
 
     @Override
@@ -42,15 +41,15 @@ public class PrimeNumbersCollector implements
     }
 
     /**
-     * 从质数列表里取出来，看看是不是candidate的约数。
+     * 从质数列表里取出来，看看是不是candidate的约数.
      *
      * @param primes 质数列表
      * @param candidate 判断值
      * @return true -> 质数； false->非质数。
      */
-    private Boolean isPrime(
-            List<Integer> primes,
-            Integer candidate) {
+    private static Boolean isPrime(
+        List<Integer> primes,
+        Integer candidate) {
         return primes.stream().noneMatch(i -> candidate % i == 0);
     }
 

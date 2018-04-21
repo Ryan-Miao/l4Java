@@ -15,3 +15,25 @@ Learn for Java
 - findbugs
 - pmd
 - dependency report
+
+
+## how to run
+
+```
+git clone git@github.com:Ryan-Miao/l4Java.git
+```
+然后，导入idea。
+
+
+在idea里设置-editor-codestyle导入`config/intellij-java-google-style.xml`
+
+idea需要安装插件
+- lombok
+- checkstyle
+- pmd
+
+lombok 需要在设置-compile-annotation允许
+
+checkstyle添加配置文件`config/checkstyle/checkstyle.xml`
+
+pmd添加配置文件`config/pmd/pmd-ruleset.xml`

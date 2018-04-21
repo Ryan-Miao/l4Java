@@ -13,44 +13,44 @@ import org.junit.Test;
 
 public class DistinctTest {
 
-  private List<User> users = Lists.newArrayList(
-      new User(1, "a"),
-      new User(1, "b"),
-      new User(2, "b"),
-      new User(1, "a"));
+    private List<User> users = Lists.newArrayList(
+        new User(1, "a"),
+        new User(1, "b"),
+        new User(2, "b"),
+        new User(1, "a"));
 
-  @Test
-  public void demo() {
-    users.parallelStream().distinct().forEach(System.out::println);
-  }
-
-  @Test
-  public void dis1() {
-    List<User> result = new LinkedList<>();
-    for (User user : users) {
-      boolean b = result.stream().anyMatch(u -> u.getId().equals(user.getId()));
-      if (!b) {
-        result.add(user);
-      }
+    @Test
+    public void demo() {
+        users.parallelStream().distinct().forEach(System.out::println);
     }
 
-    System.out.println(result);
-  }
+    @Test
+    public void dis1() {
+        List<User> result = new LinkedList<>();
+        for (User user : users) {
+            boolean b = result.stream().anyMatch(u -> u.getId().equals(user.getId()));
+            if (!b) {
+                result.add(user);
+            }
+        }
 
-  @Test
-  public void dis2() {
-    Set<User> result = new HashSet<>(users);
-    System.out.println(result);
-  }
+        System.out.println(result);
+    }
 
-  @Test
-  public void dis3() {
-    users.parallelStream().filter(distinctByKey(User::getId))
-        .forEach(System.out::println);
-  }
+    @Test
+    public void dis2() {
+        Set<User> result = new HashSet<>(users);
+        System.out.println(result);
+    }
 
-  private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
-    Set<Object> seen = ConcurrentHashMap.newKeySet();
-    return t -> seen.add(keyExtractor.apply(t));
-  }
+    @Test
+    public void dis3() {
+        users.parallelStream().filter(distinctByKey(User::getId))
+            .forEach(System.out::println);
+    }
+
+    private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+        Set<Object> seen = ConcurrentHashMap.newKeySet();
+        return t -> seen.add(keyExtractor.apply(t));
+    }
 }

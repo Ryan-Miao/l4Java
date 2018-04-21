@@ -5,6 +5,6 @@ package com.test.java.stream.entity;
  */
 public enum CaloricLevel {
 
-  DIET, NORMAL, FAT;
+    DIET, NORMAL, FAT;
 
 }
