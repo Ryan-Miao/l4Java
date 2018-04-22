@@ -197,31 +197,8 @@ public class CollectTest {
 
     }
 
-    @Test
-    public void testCustomizedCollector() {
-        List<Dish> rs = dishes.stream().collect(new ToListCollector<>());
-        System.out.println(rs);
-    }
 
-    @Test
-    public void testCustomizedCollectorForPrime() {
-        Map<Boolean, List<Integer>> rs = IntStream.rangeClosed(2, 100).boxed()
-            .collect(new PrimeNumbersCollector());
-        System.out.println(rs.get(true));
-    }
-
-    @Test
-    public void testCustormizedPrimeCollectorPerf() {
-        Long fastest = Long.MAX_VALUE;
-        for (int i = 0; i < 10; i++) {
-            long start = System.nanoTime();
-            Map<Boolean, List<Integer>> rs = IntStream.rangeClosed(2, 100).boxed()
-                .collect(new PrimeNumbersCollector());
-
-        }
-    }
-
-    private boolean isPrime(int candidate) {
+    boolean isPrime(int candidate) {
         int candidateRoot = (int) Math.sqrt((double) candidate);
         return IntStream.rangeClosed(2, candidateRoot).noneMatch(i -> candidate % i == 0);
     }

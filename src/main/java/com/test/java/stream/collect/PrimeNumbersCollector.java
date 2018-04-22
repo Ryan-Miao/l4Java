@@ -33,8 +33,8 @@ public class PrimeNumbersCollector implements
     public BiConsumer<Map<Boolean, List<Integer>>, Integer> accumulator() {
         return (Map<Boolean, List<Integer>> acc, Integer candidate) -> {
             final List<Integer> currentPrimes = acc.get(true);
-            final Boolean isP = isPrime(currentPrimes, candidate);
-            acc.get(isP).add(candidate);
+
+            acc.get(isPrime(acc.get(true), candidate)).add(candidate);
         };
     }
 
@@ -48,7 +48,8 @@ public class PrimeNumbersCollector implements
     private static Boolean isPrime(
         List<Integer> primes,
         Integer candidate) {
-        return primes.stream().noneMatch(i -> candidate % i == 0);
+        int candidateRoot = (int) Math.sqrt((double) candidate);
+        return primes.stream().filter(p -> p<=candidateRoot).noneMatch(i -> candidate % i == 0);
     }
 
     @Override
