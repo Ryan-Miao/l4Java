@@ -21,14 +21,12 @@ public class PrimeNumbersCollector implements
 
     @Override
     public Supplier<Map<Boolean, List<Integer>>> supplier() {
-
         return () -> {
             Map<Boolean, List<Integer>> map = new HashMap<>();
             map.put(true, new ArrayList<>());
             map.put(false, new ArrayList<>());
             return map;
         };
-
     }
 
     @Override
