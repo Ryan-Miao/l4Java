@@ -197,8 +197,6 @@ public class NewDateAPITest {
 
         LocalDateTime dateTime = LocalDateTime.of(2018, 5, 5, 1, 1, 1);
         Assert.assertEquals("\"2018-05-05T01:01:01\"", mapper.writeValueAsString(dateTime));
-
-
     }
 
 }
