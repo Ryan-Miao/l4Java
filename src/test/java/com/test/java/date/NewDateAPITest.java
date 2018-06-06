@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -15,6 +17,10 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.SimpleTimeZone;
+import java.util.TimeZone;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -48,6 +54,10 @@ public class NewDateAPITest {
 
         LocalDate hundredDay2014 = LocalDate.ofYearDay(2014, 100);
         System.out.println("100th day of 2014=" + hundredDay2014);
+
+        Date date = new Date();
+        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        System.out.println(localDate);
     }
 
     @Test
@@ -183,6 +193,9 @@ public class NewDateAPITest {
         LocalDateTime dt = LocalDateTime.parse("27::五月::2014 21::39::48",
             DateTimeFormatter.ofPattern("d::MMM::uuuu HH::mm::ss"));
         System.out.println("Default format after parsing = " + dt);
+
+        LocalDate parse = LocalDate.parse("2018-05-05");
+        System.out.println(parse);
     }
 
     @Test
@@ -199,4 +212,28 @@ public class NewDateAPITest {
         Assert.assertEquals("\"2018-05-05T01:01:01\"", mapper.writeValueAsString(dateTime));
     }
 
+    @Test
+    public void testSimpleDateFormat() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone(ZoneId.of("GMT")));
+        System.out.println(TimeZone.getDefault());
+        Date parse = simpleDateFormat.parse("2018-05-17", new ParsePosition(0));
+        System.out.println(parse);
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        format.setCalendar(new GregorianCalendar(new SimpleTimeZone(0, "GMT")));
+        System.out.println(format.format(parse));
+    }
+
+
+    @Test
+    public void timezoneTest() {
+        TimeZone defaultTimezone = TimeZone.getDefault();
+        System.out.println(defaultTimezone);
+
+        System.out.println(LocalDateTime.now());
+        LocalDate now = LocalDate.now(ZoneId.of("Asia/Shanghai"));
+        System.out.println(now);
+
+    }
 }
