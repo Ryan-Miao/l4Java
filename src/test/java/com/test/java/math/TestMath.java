@@ -4,6 +4,7 @@ import com.test.java.num.BigDecim;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class TestMath {
@@ -18,7 +19,7 @@ public class TestMath {
     }
 
     @Test
-    public void testRount() {
+    public void testRound() {
         int a = 25478033;
         int b = 458072581;
 
@@ -37,6 +38,19 @@ public class TestMath {
         double v = Double
             .parseDouble(decimalFormat.format(successRequestCount * 100.0 / requestCount));
         System.out.println(v);
+    }
+
+    @Test
+    public void testCeil() {
+        Integer a = 5;
+        Integer b = 3;
+
+        Integer r1 = a/b;
+        Double r2 = a/(double)b;
+        double ceil = Math.ceil(r2);
+        Assert.assertEquals((Integer) 1, r1);
+        Assert.assertEquals((Double) 1.6666666666666667, r2);
+        Assert.assertEquals(2, (int)ceil);
     }
 
 }
