@@ -190,12 +190,12 @@ public class NewDateAPITest {
         System.out.println("Default format of Instant=" + timestamp);
 
         //Parse examples
-        LocalDateTime dt = LocalDateTime.parse("27::五月::2014 21::39::48",
-            DateTimeFormatter.ofPattern("d::MMM::uuuu HH::mm::ss").withZone(ZoneId.of("Asia/Shanghai")));
-        System.out.println("Default format after parsing = " + dt);
-
-        LocalDate parse = LocalDate.parse("2018-05-05");
-        System.out.println(parse);
+//        LocalDateTime dt = LocalDateTime.parse("27::五月::2014 21::39::48",
+//            DateTimeFormatter.ofPattern("d::MMM::uuuu HH::mm::ss").withZone(ZoneId.of("Asia/Shanghai")));
+//        System.out.println("Default format after parsing = " + dt);
+//
+//        LocalDate parse = LocalDate.parse("2018-05-05");
+//        System.out.println(parse);
     }
 
     @Test
