@@ -42,7 +42,7 @@ public class TestMath {
 
     @Test
     public void testCeil() {
-        Integer a = 5;
+        Integer a = 1;
         Integer b = 3;
 
         Integer r1 = a/b;

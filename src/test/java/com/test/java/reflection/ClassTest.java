@@ -1,12 +1,15 @@
 package com.test.java.reflection;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.test.java.clazz.polimophic.entity.Employee;
 import com.test.java.clazz.polimophic.entity.Manager;
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
@@ -62,7 +65,7 @@ public class ClassTest {
     }
 
     @Test
-    public void prinConstructor() {
+    public void printConstructor() {
         StringBuilder sb = new StringBuilder();
         Class clazz = Manager.class;
         Constructor[] declaredConstructors = clazz.getDeclaredConstructors();
@@ -91,8 +94,8 @@ public class ClassTest {
     }
 
     /**
-     * public java.lang.String getName(); public int getSalary(); public void setBonus(arg0); public
-     * int getBonus();
+     * 该类声明的全部方法。 public java.lang.String getName(); public int getSalary(); public void
+     * setBonus(arg0); public int getBonus();
      */
     @Test
     public void printMethod() {
@@ -122,7 +125,7 @@ public class ClassTest {
     }
 
     /**
-     *  private int bonus;
+     * 该类中声明的全部字段。 private int bonus;
      */
     @Test
     public void printFields() {
@@ -138,6 +141,77 @@ public class ClassTest {
             }
             System.out.println(type.getName() + " " + name + ";");
         }
+    }
+
+    @Test
+    public void getFieldVal() throws NoSuchFieldException, IllegalAccessException {
+        Manager manager = new Manager("a", 1, 100);
+        Class<? extends Manager> clazz = manager.getClass();
+        Field bonus = clazz.getDeclaredField("bonus");
+        bonus.setAccessible(true);
+        Object bonusVal = bonus.get(manager);
+        System.out.println((int) bonusVal);
+        System.out.println(bonus.getInt(manager));
+    }
+
+    @Test
+    public void writeFiledVal() throws NoSuchFieldException, IllegalAccessException {
+        Manager manager = new Manager("a", 1, 100);
+        Class<? extends Manager> clazz = manager.getClass();
+        Field bonus = clazz.getDeclaredField("bonus");
+        bonus.setAccessible(true);
+        bonus.set(manager, 1000);
+
+        assertEquals(1000, manager.getBonus());
+    }
+
+    @Test
+    public void newInstanceTest()
+        throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
+        Class clazz = Manager.class;
+        Constructor constructor = clazz.getConstructor(String.class, int.class, int.class);
+        Manager instance = (Manager) constructor.newInstance("a", 1, 1);
+        assertEquals(1, instance.getBonus());
+    }
+
+    @Test
+    public void invokeMethod()
+        throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Manager manager = new Manager("a", 1, 100);
+        Class<? extends Manager> clazz = manager.getClass();
+        Method method = clazz.getDeclaredMethod("getBonus");
+        int rs = (int) method.invoke(manager);
+        assertEquals(100, rs);
+
+        Method setBonus = clazz.getDeclaredMethod("setBonus", int.class);
+        Object invoke = setBonus.invoke(manager, 0);
+        assertNull(invoke);
+        assertEquals(0, manager.getBonus());
+    }
+
+    @Test
+    public void newArray() {
+        int[] a = {1, 2, 3};
+        int[] a2 = (int[]) goodCopyOf(a, 2);
+        assertEquals(1, a2[0]);
+        assertEquals(2, a2[1]);
+
+        String[] str = {"a", "b", "c"};
+        String[] str2 = (String[]) goodCopyOf(str, 2);
+        assertEquals("a", str2[0]);
+        assertEquals("b", str2[1]);
+    }
+
+    private Object goodCopyOf(Object a, int newLength) {
+        Class cl = a.getClass();
+        if (!cl.isArray()) {
+            return null;
+        }
+
+        int length = Array.getLength(a);
+        Object newArray = Array.newInstance(cl.getComponentType(), newLength);
+        System.arraycopy(a, 0, newArray, 0, Math.min(length, newLength));
+        return newArray;
     }
 
 }
