@@ -46,6 +46,9 @@ public class InheritanceTest {
 
         Man man = child;
         System.out.println(objectMapper.writeValueAsString(man));
+
+        System.out.println(parent.getClass());
+        System.out.println(man.getClass());
     }
 
 }
