@@ -59,8 +59,6 @@ public class ThreadPoolExecutorTest {
         Object o = t1.get();
         System.out.println(o);
 
-
-
         Thread.sleep(10);
 
         System.out.println("-----------------");
@@ -73,6 +71,26 @@ public class ThreadPoolExecutorTest {
         Future<Object> t2 = threadPoolExecutor.submit(() -> "test");
         Object o2 = t2.get();
         System.out.println(o2);
+    }
+
+    @Test
+    public void testMaxNum() throws InterruptedException {
+        for (int i = 0; i < 100000; i++) {
+            int n = i;
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println(n);
+                }
+            });
+            thread.start();
+        }
+
     }
 
 }
