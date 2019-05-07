@@ -42,14 +42,14 @@ public class TestMath {
 
     @Test
     public void testCeil() {
-        Integer a = 1;
+        Integer a = 2;
         Integer b = 3;
 
-        Integer r1 = a/b;
-        Double r2 = a/(double)b;
+        Integer r1 = b/a;
+        Double r2 = b/(double)a;
         double ceil = Math.ceil(r2);
         Assert.assertEquals((Integer) 1, r1);
-        Assert.assertEquals((Double) 1.6666666666666667, r2);
+        Assert.assertEquals((Double) 1.5, r2);
         Assert.assertEquals(2, (int)ceil);
     }
 

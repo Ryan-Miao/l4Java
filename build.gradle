@@ -1,5 +1,12 @@
-plugins {
-    id 'io.franzbecker.gradle-lombok' version '1.11'
+buildscript {
+    repositories {
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+        mavenCentral()
+    }
+    ext {
+        lombokVersion = '1.18.4'
+    }
+ 
 }
 
 group 'com.test'
@@ -26,6 +33,11 @@ dependencies {
     // https://mvnrepository.com/artifact/com.google.guava/guava
     compile group: 'com.google.guava', name: 'guava', version: '24.1-jre'
 
+    compileOnly("org.projectlombok:lombok:${lombokVersion}")
+    testCompileOnly("org.projectlombok:lombok:${lombokVersion}")
+    annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+    testAnnotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.5'
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.6"
 
@@ -33,7 +45,3 @@ dependencies {
 }
 
 
-lombok { // optional: values below are the defaults
-    version = "1.16.20"
-    sha256 = ""
-}
