@@ -8,12 +8,12 @@ import org.junit.Test;
 public class NumTest {
 
     @Test
-    public void numTest(){
-       int x = 1;
-       x += 3.5;
+    public void numTest() {
+        int x = 1;
+        x += 3.5;
         System.out.println(x);
 
-        System.out.println(1<<35);
+        System.out.println(1 << 35);
     }
 
 }

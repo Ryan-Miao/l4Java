@@ -23,6 +23,7 @@ public class ProxyTest {
             Integer value = i + 1;
             InvocationHandler handler = new TraceHandler(value);
             Object proxy = Proxy.newProxyInstance(null, new Class[]{Comparable.class}, handler);
+            System.out.println(proxy.getClass());
             elements[i] = proxy;
         }
 
