@@ -6,12 +6,68 @@ import org.junit.Test;
 
 public class 单链表反转 {
 
+    /**
+     * @author Ryan Miao
+     */
     @Data
     static class Node {
-        private boolean head;
+        private Boolean head;
         private Integer data;
         private Node next;
 
+    }
+
+    @Test
+    public void testInsert() {
+        Node node = makeNode(3, 4, 5, 6, 7, 8, 9);
+        System.out.println("--------origin--------");
+        printNode(node);
+        // insert 10 between 4 and 5
+        Node p = node;
+        while (p != null) {
+            if (p.getData() == 4) {
+                Node tmp = new Node();
+                tmp.setData(10);
+                tmp.next = p.next;
+                p.next = tmp;
+                break;
+            }
+            p = p.next;
+        }
+
+        System.out.println("--------inserted--------");
+        printNode(node);
+    }
+
+    @Test
+    public void deleteNode() {
+        Node node = makeNode(3, 4, 5, 6, 7, 8, 9);
+        System.out.println("--------origin--------");
+        printNode(node);
+
+        //delete 5
+        Node head = node;
+        Node p = node;
+        while (p != null) {
+            if (p.getData() == 5) {
+                //if the first is 5, skip
+                head.next = p.next;
+                break;
+            }
+            Node pre = p;
+            p = p.next;
+            if (p != null && p.getData().equals(5)) {
+                pre.next = p.next;
+                break;
+            }
+        }
+
+        System.out.println("---------deleted---------");
+        printNode(head);
+    }
+
+    private Node makeNode(Integer... arr) {
+        return toNode(arr);
     }
 
     @Test
@@ -52,13 +108,21 @@ public class 单链表反转 {
         if (head.next == null) {
             return head;
         }
-        Node newHead = new Node();
-        newHead.setData(head.getData());
-        while (head.next != null) {
-            Node tmp = head.next;
-            head.next = head.next.next;
 
+        // new node head
+        final Node newHead = new Node();
+        newHead.setHead(true);
+        newHead.setData(head.getData());
+        // pointer
+        Node p = head;
+        while (p.next != null) {
+            // 暂存取下的节点
+            Node tmp = p.next;
+            // 原来的链表指针移动到下一个
+           p.next = p.next.next;
+            // 取下的节点 指向 新链表的头节点之后
             tmp.next = newHead.next;
+            // 新链表指向 插入的节点
             newHead.next = tmp;
         }
         return newHead;
@@ -116,11 +180,13 @@ public class 单链表反转 {
     }
 
     private static void printNode(Node head) {
-        Node p = head;
+        Node p = head.next;
         while (p != null) {
             System.out.print(p.getData());
-            System.out.print("->");
             p = p.next;
+            if (p != null) {
+                System.out.print("->");
+            }
         }
         System.out.println();
     }
