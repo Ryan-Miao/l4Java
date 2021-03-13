@@ -4,6 +4,10 @@ package com.test.algorithm.link;
 import lombok.Data;
 import org.junit.Test;
 
+/**
+ * @author Ryan Miao
+ * @see https://github.com/Ryan-Miao/l4Java/blob/master/src/test/java/com/test/algorithm/link/%E5%8D%95%E9%93%BE%E8%A1%A8%E5%8F%8D%E8%BD%AC.java
+ */
 public class 单链表反转 {
 
     /**
@@ -119,7 +123,7 @@ public class 单链表反转 {
             // 暂存取下的节点
             Node tmp = p.next;
             // 原来的链表指针移动到下一个
-           p.next = p.next.next;
+            p.next = p.next.next;
             // 取下的节点 指向 新链表的头节点之后
             tmp.next = newHead.next;
             // 新链表指向 插入的节点
@@ -159,22 +163,29 @@ public class 单链表反转 {
         if (head == null) {
             return null;
         }
-        Node pre = head.next;
-        if (pre == null) {
+        // 左边链表的tail节点
+        Node leftTail = head.next;
+        if (leftTail == null) {
             return head;
         }
-        Node pCur = pre.next;
+
+        // 当前的指针右边原始链表的第一个节点
+        Node pCur = leftTail.next;
         if (pCur == null) {
-            pre.next = head;
+            leftTail.next = head;
             head.next = null;
-            return pre;
+            return leftTail;
         }
 
         while (pCur != null) {
-            pre.next = pCur.next;
+            // 左边链表tail指向 右边链表的下个节点
+            leftTail.next = pCur.next;
+            // 右边链表的当前第一个节点指向昨天链表的head
             pCur.next = head.next;
+            // head指向插入的节点
             head.next = pCur;
-            pCur = pre.next;
+            // 右边链表指针移动下一个节点
+            pCur = leftTail.next;
         }
         return head;
     }
