@@ -3,6 +3,7 @@ package com.test.java.json;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.junit.Test;
 
 /**
@@ -21,6 +22,7 @@ public class InheritanceTest {
         private int id;
     }
 
+    @EqualsAndHashCode(callSuper = true)
     @Data
     class Child extends Parent implements Man {
 

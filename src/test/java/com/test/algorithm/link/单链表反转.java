@@ -1,7 +1,6 @@
 package com.test.algorithm.link;
 
 
-import lombok.Data;
 import org.junit.Test;
 
 /**
@@ -10,44 +9,34 @@ import org.junit.Test;
  */
 public class 单链表反转 {
 
-    /**
-     * @author Ryan Miao
-     */
-    @Data
-    static class Node {
-        private Boolean head;
-        private Integer data;
-        private Node next;
-
-    }
 
     @Test
     public void testInsert() {
         Node node = makeNode(3, 4, 5, 6, 7, 8, 9);
         System.out.println("--------origin--------");
-        printNode(node);
+        node.print();
         // insert 10 between 4 and 5
         Node p = node;
         while (p != null) {
             if (p.getData() == 4) {
                 Node tmp = new Node();
                 tmp.setData(10);
-                tmp.next = p.next;
-                p.next = tmp;
+                tmp.setNext(p.getNext());
+                p.setNext(tmp);
                 break;
             }
-            p = p.next;
+            p = p.getNext();
         }
 
         System.out.println("--------inserted--------");
-        printNode(node);
+        node.print();
     }
 
     @Test
     public void deleteNode() {
         Node node = makeNode(3, 4, 5, 6, 7, 8, 9);
         System.out.println("--------origin--------");
-        printNode(node);
+        node.print();
 
         //delete 5
         Node head = node;
@@ -55,19 +44,19 @@ public class 单链表反转 {
         while (p != null) {
             if (p.getData() == 5) {
                 //if the first is 5, skip
-                head.next = p.next;
+                head.setNext(p.getNext());
                 break;
             }
             Node pre = p;
-            p = p.next;
+            p = p.getNext();
             if (p != null && p.getData().equals(5)) {
-                pre.next = p.next;
+                pre.setNext(p.getNext());
                 break;
             }
         }
 
         System.out.println("---------deleted---------");
-        printNode(head);
+        head.print();
     }
 
     private Node makeNode(Integer... arr) {
@@ -99,17 +88,19 @@ public class 单链表反转 {
         Node head = toNode(arr);
 
         System.out.println("=========origin==========");
-        printNode(head);
+        String print = head.print();
+        System.out.println(print);
 
         Node inverse = headInsert(head);
 
         System.out.println("---------head insert--------");
-        printNode(inverse);
+        String print1 = inverse.print();
+        System.out.println(print1);
 
     }
 
     private Node headInsert(Node head) {
-        if (head.next == null) {
+        if (head.getNext() == null) {
             return head;
         }
 
@@ -119,15 +110,15 @@ public class 单链表反转 {
         newHead.setData(head.getData());
         // pointer
         Node p = head;
-        while (p.next != null) {
+        while (p.getNext() != null) {
             // 暂存取下的节点
-            Node tmp = p.next;
+            Node tmp = p.getNext();
             // 原来的链表指针移动到下一个
-            p.next = p.next.next;
+            p.setNext(p.getNext().getNext());
             // 取下的节点 指向 新链表的头节点之后
-            tmp.next = newHead.next;
+            tmp.setNext(newHead.getNext());
             // 新链表指向 插入的节点
-            newHead.next = tmp;
+            newHead.setNext(tmp);
         }
         return newHead;
     }
@@ -136,12 +127,14 @@ public class 单链表反转 {
         Node head = toNode(arr);
 
         System.out.println("=========origin==========");
-        printNode(head);
+        String print = head.print();
+        System.out.println(print);
 
         Node inverse = inverse(head);
 
         System.out.println("---------inverse--------");
-        printNode(inverse);
+        String print1 = inverse.print();
+        System.out.println(print1);
     }
 
     private Node toNode(Integer[] arr) {
@@ -153,7 +146,7 @@ public class 单链表反转 {
             Node node = new Node();
             node.setData(arr[i]);
             node.setNext(null);
-            tail.next = node;
+            tail.setNext(node);
             tail = node;
         }
         return head;
@@ -163,42 +156,29 @@ public class 单链表反转 {
         if (head == null) {
             return null;
         }
-        // 左边链表的tail节点
-        Node leftTail = head.next;
+        // 左边链表的tail节点 te first node
+        Node leftTail = head.getNext();
         if (leftTail == null) {
             return head;
         }
 
         // 当前的指针右边原始链表的第一个节点
-        Node pCur = leftTail.next;
+        Node pCur = leftTail.getNext();
         if (pCur == null) {
-            leftTail.next = head;
-            head.next = null;
-            return leftTail;
+            return head;
         }
 
         while (pCur != null) {
             // 左边链表tail指向 右边链表的下个节点
-            leftTail.next = pCur.next;
-            // 右边链表的当前第一个节点指向昨天链表的head
-            pCur.next = head.next;
+            leftTail.setNext(pCur.getNext());
+            // 链表第一个取下来，要插入左边链表的头部，head就是左边链表的头部
+            pCur.setNext(head.getNext());
             // head指向插入的节点
-            head.next = pCur;
+            head.setNext(pCur);
             // 右边链表指针移动下一个节点
-            pCur = leftTail.next;
+            pCur = leftTail.getNext();
         }
         return head;
     }
 
-    private static void printNode(Node head) {
-        Node p = head.next;
-        while (p != null) {
-            System.out.print(p.getData());
-            p = p.next;
-            if (p != null) {
-                System.out.print("->");
-            }
-        }
-        System.out.println();
-    }
 }
