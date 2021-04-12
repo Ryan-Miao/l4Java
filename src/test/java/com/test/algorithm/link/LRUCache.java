@@ -16,19 +16,18 @@ public class LRUCache {
     @Test
     public void testCache() {
         MyLRUCache cache = new MyLRUCache();
-        for (int i = 0; i < 8; i++) {
+        cache.add(1);
+        cache.add(1);
+        cache.add(2);
+        for (int i = 0; i < 4; i++) {
             cache.add(i);
-            cache.print();
         }
 
         cache.add(1);
-        cache.print();
-        cache.add(6);
-        cache.print();
-        cache.add(7);
-        cache.print();
-        cache.add(6);
-        cache.print();
+        cache.add(2);
+        cache.add(3);
+        cache.add(4);
+        cache.add(4);
     }
 
     static class MyLRUCache {
@@ -37,10 +36,11 @@ public class LRUCache {
 
 
         private final Node cacheHead = Node.head();
-        final private AtomicInteger size = new AtomicInteger(0);
+        private final AtomicInteger size = new AtomicInteger(0);
 
         public void add(Integer data) {
             log.debug("add {}", data);
+            //要插入的node
             Node node = null;
 
             // 1.find if exist remove
@@ -51,7 +51,7 @@ public class LRUCache {
                 if (data.equals(cur.getData())) {
                     // remove
                     Node pre = cur.getPre();
-                    log.debug("exist, remove {}, pre{} -> next{}", cur.getData(), pre.getData(), curNext.getData());
+                    log.debug("exist, remove {}, pre {} -> next {}", cur.getData(), pre.getData(), curNext.getData());
                     pre.setNext(curNext);
                     curNext.setPre(pre);
                     size.decrementAndGet();
@@ -91,11 +91,10 @@ public class LRUCache {
             }
 
             size.incrementAndGet();
+            if (log.isDebugEnabled()) {
+                log.debug("current cache: {}", cacheHead.print());
+            }
         }
 
-        public void print() {
-            String print = cacheHead.print();
-            log.debug("print: {}", print);
-        }
     }
 }

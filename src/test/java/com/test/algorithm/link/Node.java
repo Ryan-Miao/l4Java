@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * node
  *
- * @author Ryan
+ * @author Ryan Miao
  */
 @Data
 public class Node {
@@ -60,7 +60,6 @@ public class Node {
 
         }
 
-
         return sb.toString();
     }
 
@@ -73,6 +72,5 @@ public class Node {
         String print = h.print();
         System.out.println(print);
     }
-
 
 }
